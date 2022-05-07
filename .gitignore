@@ -1,7 +1,6 @@
 /.idea
 /dist
 /*.egg-info
-test.py
 /venv
 /build
 /tmp
