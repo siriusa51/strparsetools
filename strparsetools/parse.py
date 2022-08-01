@@ -2,7 +2,6 @@ import re
 from datetime import timedelta
 from typing import Union, Optional
 
-
 __timedelta_pattern__ = re.compile((
     r'((?P<weeks>\d+)w(eeks?)?)?'
     r'((?P<days>\d+)d(ays?)?)?'
@@ -91,3 +90,38 @@ def datasize2float(string: Union[int, str]) -> Optional[float]:
         return sum([float(v) * __unit_size__[k] for k, v in match.groupdict().items() if v])
 
     return None
+
+
+def camel(name: str, regex: str = r"[_-]+", upper_first: bool = False):
+    """
+    pythonic variable name to camel case name
+    example:
+        camel_case => camelCase
+        parse-tools => parseTools
+        ...
+
+    copy and modify from: https://github.com/30-seconds/30-seconds-of-python
+
+    :param name: variable name
+    :param regex: other regex
+    :param upper_first: is the first letter uppercase
+    :return: camel variable
+    """
+    s = re.sub(regex, " ", name).title().replace(" ", "")
+    return s if upper_first else s[0].lower() + s[1:]
+
+
+def recamel(canmel: str, replace: str = "_"):
+    """
+    camel variable name to pythonic variable name
+    example:
+        camelCase => camel_case
+        ParseTools => parse_tools
+        ...
+
+    :param canmel:
+    :param replace:
+    :return: pythonic variable name
+    """
+    s = re.sub(r"[A-Z]+", lambda match: replace + match.group(), canmel)
+    return s[1:] if s.startswith(replace) else s
